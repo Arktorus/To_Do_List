@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.To_Do_List.abhilash.internship.TaskList">
+
+    <ListView
+        android:layout_width="175dp"
+        android:layout_height="340dp"
+        android:layout_weight="0.5"
+        android:id="@+id/listView"
+        android:focusableInTouchMode="false"
+        android:isScrollContainer="false"
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText3"
+        android:inputType="text|textAutoCorrect"
+        android:hint="Add New Task Title"
+        android:maxLines="1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText4"
+        android:maxLines="1"
+        android:inputType="text|textAutoCorrect"
+        android:hint="Add Description of Task"
+        android:onClick=""
+        android:layout_below="@+id/editText3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:backgroundTint="#494f3f" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:text="Add To List"
+        android:id="@+id/button4"
+        android:layout_alignBottom="@+id/editText3"
+        android:layout_toRightOf="@+id/listView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="New_Task" />
+
+    <ListView
+        android:layout_width="170dp"
+        android:layout_height="340dp"
+        android:layout_weight="0.5"
+        android:id="@+id/listView2"
+        android:layout_below="@+id/textView"
+        android:focusableInTouchMode="false"
+        android:isScrollContainer="false"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/button4"
+        android:layout_alignEnd="@+id/button4" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Done!"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/editText4"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText4"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="To Do"
+        android:id="@+id/textView"
+        android:layout_above="@+id/listView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+</RelativeLayout>
