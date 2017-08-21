@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ public class TaskList extends AppCompatActivity {
         Intent intent = getIntent();
         name = intent.getStringExtra("name"); //The string reference for Username
 
+        //To Do List
         myListView = (ListView) findViewById(R.id.listView);
         mArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         myListView.setAdapter(mArrayAdapter);
@@ -52,7 +54,7 @@ public class TaskList extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // do the acknowledged action, beware, this is run on UI thread
-                                Remove_Task(Full);
+                                Move_Task(Full);
                             }
                         })
                         .create()
@@ -60,6 +62,7 @@ public class TaskList extends AppCompatActivity {
             }
         });
 
+        //Done List
         nmyListView = (ListView) findViewById(R.id.listView2);
         nmArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         nmyListView.setAdapter(nmArrayAdapter);
@@ -77,12 +80,13 @@ public class TaskList extends AppCompatActivity {
                         .setTitle("Delete Task")
                         .setMessage(msg)
                         .setNegativeButton("Cancel", null) // dismisses by default
-                        /*.setNeutralButton("Delete", new DialogInterface.OnClickListener(){
+                        .setNeutralButton("Edit", new DialogInterface.OnClickListener(){
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Edit_Task(Full,name+"done");
+                                Update();
                             }
-                        })*/
+                        })
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -94,7 +98,6 @@ public class TaskList extends AppCompatActivity {
                         .show();
             }
         });
-
 
         Enter_Task_Name = (EditText) findViewById(R.id.editText3);
         Enter_Task_Details = (EditText) findViewById(R.id.editText4);
@@ -129,7 +132,7 @@ public class TaskList extends AppCompatActivity {
     }
 
     //Moves from to_do to done when Task is sent from array list
-    private void Remove_Task(String Task) {
+    private void Move_Task(String Task) {
         String FILE_NAME = name + "todo";
         String[] Task_Details = Task.split("\n");
         SharedPreferences.Editor editor = getSharedPreferences(FILE_NAME, MODE_PRIVATE).edit();
@@ -154,7 +157,6 @@ public class TaskList extends AppCompatActivity {
     }
 
     private void Edit_Task(String Task, String FILE_NAME){
-        //SharedPreferences prefs = getSharedPreferences(FILE_NAME, MODE_PRIVATE);
         String[] Task_Details = Task.split("\n");
         Dialog_Box_Editor(Task_Details[0],Task_Details[1],FILE_NAME);
         SharedPreferences.Editor editor = getSharedPreferences(FILE_NAME, MODE_PRIVATE).edit();
@@ -167,24 +169,28 @@ public class TaskList extends AppCompatActivity {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
         alert.setTitle("Edit Task");
-        //alert.setMessage("Message");
+        final EditText title = new EditText(this);
+        final EditText description = new EditText(this);
 
-        // Set EditText view to get user input
-        final EditText input_name = new EditText(this);
-        //final EditText input_details = new EditText(this);
-        alert.setView(input_name);
-        //alert.setView(input_details);
-        input_name.setText(Task_Name);
-        //input_details.setText(Task_Details);
+        //title.setInputType(InputType.);
+        //description.setInputType(InputType.TYPE_CLASS_TEXT);
+        title.setText(Task_Name);
+        description.setText(Task_Details);
+
+        LinearLayout ll=new LinearLayout(this);
+        ll.setOrientation(LinearLayout.VERTICAL);
+        ll.addView(title);
+        ll.addView(description);
+        alert.setView(ll);
+
         alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String FILE_NAME = name + "todo";
-                if (input_name.getText().toString().length() != 0) {
+                if (title.getText().toString().length() != 0) {
                     //if (input_details.getText().toString() != null) {
                         SharedPreferences.Editor editor = getSharedPreferences(FILE_NAME, MODE_PRIVATE).edit();
-                        editor.putString(input_name.getText().toString(),null);
+                        editor.putString(title.getText().toString(),description.getText().toString());
                         editor.apply();
-                        //Toast.makeText(getApplicationContext(), "New Task Created!", Toast.LENGTH_SHORT).show();
                     //}
                 }
             }
@@ -199,27 +205,21 @@ public class TaskList extends AppCompatActivity {
 
     //Adds any changes to listview
     private void Update() {
-        //Toast.makeText(getApplicationContext(), "oh my god ", Toast.LENGTH_SHORT).show();
         mArrayAdapter.clear();
         nmArrayAdapter.clear();
 
         String FILE_NAME = name + "done";
         SharedPreferences prefs = getSharedPreferences(FILE_NAME, MODE_PRIVATE);
         Map<String, ?> keys = prefs.getAll();
-        for (Map.Entry<String, ?> entry : keys.entrySet()) {
-            //Toast.makeText(getApplicationContext(), "oh my god ", Toast.LENGTH_SHORT).show();
-            nmArrayAdapter.add(entry.getKey() + "\n" + entry.getValue().toString());
-            //Toast.makeText(getApplicationContext(),entry.getKey(), Toast.LENGTH_SHORT).show();
+        for (Map.Entry<String, ?> entry : keys.entrySet()) {            
+            nmArrayAdapter.add(entry.getKey() + "\n" + entry.getValue().toString());            
         }
-
-        //Toast.makeText(getApplicationContext(), "Updating task lists!", Toast.LENGTH_SHORT).show();
 
         String FILE_NAME_2 = name + "todo";
         SharedPreferences prefs_2 = getSharedPreferences(FILE_NAME_2, MODE_PRIVATE);
         Map<String, ?> keys_2 = prefs_2.getAll();
         for (Map.Entry<String, ?> entry : keys_2.entrySet()) {
             mArrayAdapter.add(entry.getKey() + "\n" + entry.getValue().toString());
-            //Toast.makeText(getApplicationContext(),"sab" + entry.getKey(), Toast.LENGTH_SHORT).show();
         }
     }
 }
